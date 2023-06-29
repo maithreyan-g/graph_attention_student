@@ -327,7 +327,7 @@ def load_eye_tracking_dataset_dict(dataset_path: str,
         for key in keys:
             if 'metadata' not in dataset_map[key] or 'image_path' not in dataset_map[key]:
                 del dataset_map[key]
-
+                
     return dataset_map
 
 

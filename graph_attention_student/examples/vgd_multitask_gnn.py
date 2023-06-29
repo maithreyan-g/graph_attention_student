@@ -32,7 +32,7 @@ import typing as t
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 from matplotlib.backends.backend_pdf import PdfPages
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_squared_error

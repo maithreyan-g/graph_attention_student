@@ -11,12 +11,12 @@ import random
 
 import numpy as np
 import matplotlib.pyplot as plt
-import tensorflow.keras as ks
-from pycomex.functional.experiment import Experiment
-from pycomex.utils import file_namespace, folder_path
+import tensorflow as tf
+from tensorflow import keras as ks
+from pycomex.experiment import Experiment
+from pycomex.util import file_namespace, folder_path
 from visual_graph_datasets.data import load_visual_graph_dataset
 from sklearn.metrics import r2_score
-
 from graph_attention_student.models.megan import Megan
 from graph_attention_student.data import process_graph_dataset
 from graph_attention_student.data import process_index_data_map

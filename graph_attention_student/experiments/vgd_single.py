@@ -9,7 +9,7 @@ import typing as t
 from collections import Counter
 
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score

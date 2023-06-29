@@ -12,7 +12,7 @@ an argument to a keras ``custom_object_scope`` context:
         model = ks.models.load_model('model/path')
 
 """
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 
 from graph_attention_student.models.megan import Megan
 from graph_attention_student.training import NoLoss

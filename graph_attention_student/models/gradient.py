@@ -1,7 +1,7 @@
 import typing as t
 
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 from kgcnn.layers.conv.gcn_conv import GCN
 from kgcnn.layers.modules import DenseEmbedding
 from kgcnn.layers.pooling import PoolingNodes

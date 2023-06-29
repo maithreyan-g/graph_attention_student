@@ -7,7 +7,7 @@ import typing as t
 
 import numpy as np
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 from pycomex.experiment import SubExperiment
 from pycomex.util import Skippable
 from kgcnn.data.utils import ragged_tensor_from_nested_numpy

@@ -3,7 +3,7 @@ import time
 import typing as t
 
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 
 from graph_attention_student.util import NULL_LOGGER
 

@@ -20,7 +20,7 @@ import typing as t
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 from pycomex.experiment import SubExperiment
 from pycomex.util import Skippable
 from kgcnn.layers.conv.gat_conv import AttentionHeadGATV2

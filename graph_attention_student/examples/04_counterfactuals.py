@@ -39,10 +39,10 @@ import tempfile
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 from matplotlib.backends.backend_pdf import PdfPages
-from pycomex.functional.experiment import Experiment
-from pycomex.utils import folder_path, file_namespace
+from pycomex.experiment import Experiment
+from pycomex.util import folder_path, file_namespace
 from visual_graph_datasets.data import load_visual_graph_dataset
 from visual_graph_datasets.util import dynamic_import
 from vgd_counterfactuals import CounterfactualGenerator

@@ -4,7 +4,7 @@ import typing as t
 
 import numpy as np
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 from pycomex.util import Skippable
 from pycomex.experiment import SubExperiment
 from graph_attention_student.models import Megan

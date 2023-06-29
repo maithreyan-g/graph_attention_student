@@ -10,7 +10,7 @@ import random
 import typing as t
 
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages

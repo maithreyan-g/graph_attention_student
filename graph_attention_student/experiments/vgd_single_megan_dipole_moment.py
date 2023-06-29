@@ -1,14 +1,13 @@
 import os
 import typing as t
-
 import numpy as np
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 from pycomex.functional.experiment import Experiment
 from pycomex.utils import folder_path, file_namespace
 
 # == DATASET PARAMETERS ==
-VISUAL_GRAPH_DATASET_PATH: str = os.path.expanduser('/media/ssd/.visual_graph_datasets/datasets/dipole_moment')
+VISUAL_GRAPH_DATASET_PATH: str = os.path.expanduser('C:\\Users\\maith\\Downloads\\dipole_moment\\dipole_moment')
 USE_DATASET_SPLIT: t.Optional[int] = None
 TRAIN_RATIO: float = 0.85
 NUM_EXAMPLES: int = 100
@@ -50,6 +49,7 @@ OPTIMIZER_CB = lambda: ks.optimizers.experimental.AdamW(learning_rate=0.001)
 __DEBUG__ = True
 __TESTING__ = False
 
+# ==Creates a new folder for the results by extending inside results folder ==
 experiment = Experiment.extend(
     'vgd_single_megan.py',
     base_path=folder_path(__file__),

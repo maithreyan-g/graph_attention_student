@@ -6,7 +6,7 @@ from typing import List, Dict, Optional, Callable
 from collections import defaultdict
 
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 
 
 # == CUSTOM ACTIVATION FUNCTIONS ============================================================================

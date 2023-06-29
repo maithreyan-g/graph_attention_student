@@ -10,7 +10,7 @@ import typing as t
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 from pycomex.util import Skippable
 from pycomex.experiment import Experiment
 from sklearn.metrics import mean_squared_error

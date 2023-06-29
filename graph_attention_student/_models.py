@@ -9,7 +9,7 @@ import typing as t
 
 import numpy as np
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 from tensorflow.python.keras.engine import compile_utils
 from kgcnn.data.utils import ragged_tensor_from_nested_numpy
 from kgcnn.layers.modules import GraphBaseLayer

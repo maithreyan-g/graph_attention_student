@@ -10,7 +10,7 @@ import pathlib
 import typing as t
 
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 import numpy as np
 from pycomex.util import Skippable
 from pycomex.experiment import SubExperiment

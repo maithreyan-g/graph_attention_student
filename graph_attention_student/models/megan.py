@@ -1,8 +1,18 @@
 import typing as t
-
 import numpy as np
 import tensorflow as tf
-import tensorflow.keras as ks
+import os
+import sys
+import csv
+import time
+import json
+import random
+import orjson
+import logging
+import typing as t
+import visual_graph_datasets.typing as tv
+
+from tensorflow import keras as ks
 import visual_graph_datasets.typing as tv
 from tensorflow.python.keras.engine import compile_utils
 from kgcnn.data.utils import ragged_tensor_from_nested_numpy
@@ -21,6 +31,32 @@ from graph_attention_student.layers import MultiHeadGATV2Layer
 from graph_attention_student.training import mae
 from graph_attention_student.training import bce
 from graph_attention_student.training import shifted_sigmoid
+from kgcnn.layers.casting import ChangeTensorType
+from kgcnn.layers.conv.schnet_conv import SchNetInteraction
+from kgcnn.layers.geom import NodeDistanceEuclidean, GaussBasisLayer, NodePosition, ShiftPeriodicLattice
+from kgcnn.layers.modules import Dense, OptionalInputEmbedding
+from kgcnn.layers.mlp import GraphMLP, MLP
+from kgcnn.model.utils import update_model_kwargs
+from visual_graph_datasets.data import load_visual_graph_dataset
+from graph_attention_student.schnet import make_model, tensor_graph,data_load
+
+# The schnet layer is used to add geometric feature too the MEGAN model
+class SchNet:
+    def __init__(self, graph_dict: dict=None, na:list=None, nc:list=None, ei:list=None, input1:list=None, inp1:list=None, 
+                 path:str='C:\\Users\\maith\\Downloads\\dipole_moment\\dipole_moment',*args,**kwargs):
+        self.graph_dict=data_load(path)
+        self.na,self.nc,self.ei=tensor_graph(self.graph_dict)
+        self.input1=[self.na[0],self.nc[0],self.ei[0]]
+        self.inp1=[{'shape': self.input1[0].shape[1:], 'ragged':True, 
+                    'batch_size':self.input1[0].shape[0],"name": "node_attributes","dtype": "float32"}, 
+                    {'shape': self.input1[1].shape[1:], 'ragged':True, 'batch_size':self.input1[1].shape[0],
+                     "name": "node_coordinates", "dtype": "float32"}, {'shape': self.input1[2].shape[1:], 
+                                                                       'ragged':True,"name": "edge_indices", 'batch_size':self.input1[2].shape[0], "dtype": "int64"}]
+        self.model1=make_model(inputs=self.inp1, output_embedding="node") #if graph embeddings is needed modify in output embedding as 'graph', by default it has been modified to give the node embeddings
+    def embeddings(self):    
+        self.new_embeddings=self.model1.predict(self.input1)
+        return(self.new_embeddings)
+
 
 
 class MockMegan:
@@ -357,10 +393,11 @@ class Megan(ks.models.Model):
         # graph_input: ([B], H)
         if self.use_graph_attributes:
             node_input, edge_input, edge_index_input, graph_input = inputs
+                  
         else:
             node_input, edge_input, edge_index_input = inputs
             graph_input = None
-
+            
         # First of all we apply all the graph convolutional / attention layers. Each of those layers outputs
         # the attention logits alpha additional to the node embeddings. We collect all the attention logits
         # in a list so that we can later sum them all up.
@@ -396,6 +433,7 @@ class Megan(ks.models.Model):
         node_importances_tilde = self.lay_act_importance(node_importances_tilde)
 
         node_importances = node_importances_tilde * pooled_edges
+
         if self.sparsity_factor > 0:
             self.lay_sparsity(node_importances_tilde)
             self.lay_sparsity(edge_importances)

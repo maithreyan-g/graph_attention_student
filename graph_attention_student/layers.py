@@ -3,7 +3,7 @@ import typing as t
 from typing import List
 
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 
 from kgcnn.ops.partition import partition_row_indexing
 from kgcnn.ops.segment import segment_ops_by_name, segment_softmax
@@ -13,7 +13,11 @@ from kgcnn.layers.modules import DropoutEmbedding, DenseEmbedding, ActivationEmb
 from kgcnn.layers.pooling import PoolingLocalEdges
 from kgcnn.layers.conv.gat_conv import PoolingLocalEdgesAttention
 from kgcnn.layers.conv.gat_conv import AttentionHeadGATV2
-
+from kgcnn.layers.base import GraphBaseLayer
+from kgcnn.layers.modules import LazyMultiply, Dense, LazyAdd
+from kgcnn.layers.pooling import PoolingLocalEdges
+from kgcnn.layers.gather import GatherNodesOutgoing
+from kgcnn.layers.casting import ChangeTensorType
 
 class CoefficientActivation(GraphBaseLayer):
 
@@ -137,6 +141,7 @@ class MultiChannelGatLayer(AttentionHeadGATV2):
         self.lay_concat_alphas = LazyConcatenate(axis=-2)
         self.lay_concat_embeddings = LazyConcatenate(axis=-2)
         self.lay_pool_attention = ExtendedPoolingLocalEdgesAttention()
+        
 
     def call(self, inputs, **kwargs):
         """Forward pass.

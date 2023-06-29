@@ -3,14 +3,14 @@ import pathlib
 import typing as t
 
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 # from pycomex.util import Skippable
 # from pycomex.experiment import SubExperiment
 from pycomex.functional.experiment import Experiment
 from pycomex.utils import folder_path, file_namespace
 
 # == DATASET PARAMETERS ==
-VISUAL_GRAPH_DATASET_PATH: str = os.path.expanduser('/media/ssd/.visual_graph_datasets/datasets/aqsoldb')
+VISUAL_GRAPH_DATASET_PATH: str = os.path.expanduser('C:\\Users\\maith\\Downloads\\aqsoldb\\aqsoldb')
 USE_DATASET_SPLIT: t.Optional[int] = 0
 TRAIN_RATIO: float = 0.8
 NUM_EXAMPLES: int = 100

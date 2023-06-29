@@ -40,7 +40,7 @@ from pycomex.util import Skippable
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import tensorflow.keras as ks
+from tensorflow import keras as ks
 from matplotlib.backends.backend_pdf import PdfPages
 from kgcnn.data.moleculenet import OneHotEncoder
 from kgcnn.data.utils import ragged_tensor_from_nested_numpy
