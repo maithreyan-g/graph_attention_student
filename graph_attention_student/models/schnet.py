@@ -12,10 +12,11 @@ from kgcnn.layers.geom import NodeDistanceEuclidean, GaussBasisLayer, NodePositi
 class SchNet(ks.models.Model):
 
     def __init__(self,
+                 depth: int = 3,
                  interaction_units: int = 128,
                  interaction_activation: str = 'kgcnn>shifted_softplus',
                  dense_units: t.List[int] = [64],
-                 output_units: t.List[int] = [64, 1],
+                 output_units: t.List[int] = [64, 32, 1],
                  output_activation: str = 'linear',
                  use_bias: bool = True,
                  gauss_bins: int = 20,
@@ -46,16 +47,20 @@ class SchNet(ks.models.Model):
             units=interaction_units,
             activation='linear',
         )
-        self.lay_interaction = SchNetInteraction(
-            units=interaction_units,
-            activation=interaction_activation,
-            use_bias=use_bias,
-        )
+
+        self.interaction_layers = []
+        for _ in range(depth):
+            lay = SchNetInteraction(
+                units=interaction_units,
+                activation=interaction_activation,
+                use_bias=use_bias,
+            )
+            self.interaction_layers.append(lay)
 
         # ~ prediction backend
         self.lay_pool = PoolingNodes(pooling_method='sum')
         self.output_layers = []
-        self.output_activations = ['kgcnn>shifted_softplus' for _ in output_units]
+        self.output_activations = ['kgcnn>leaky_relu' for _ in output_units]
         self.output_activations[-1] = output_activation
         for k, act in zip(self.output_units, self.output_activations):
             lay = DenseEmbedding(
@@ -67,22 +72,23 @@ class SchNet(ks.models.Model):
 
     def call(self,
              inputs,
-             return_edge_embeddings: bool = False):
+             return_node_embeddings: bool = False):
         node_input, xyz_input, edge_indices = inputs
 
         pos1, pos2 = self.lay_node_pos([xyz_input, edge_indices])
         edge_distance = self.lay_distance([pos1, pos2])
         edge_gauss = self.lay_gauss_basis(edge_distance)
 
-        edge_embedding = self.lay_dense(edge_gauss)
-        edge_embedding = self.lay_interaction([edge_embedding, edge_gauss, edge_indices])
+        node_embedding = self.lay_dense(node_input)
+        for lay in self.interaction_layers:
+            node_embedding = lay([node_embedding, edge_gauss, edge_indices])
 
-        graph_embedding = self.lay_pool(edge_embedding)
+        graph_embedding = self.lay_pool(node_embedding)
         output = graph_embedding
         for lay in self.output_layers:
             output = lay(output)
 
-        if return_edge_embeddings:
-            return edge_embedding
+        if return_node_embeddings:
+            return node_embedding
 
         return output

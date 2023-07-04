@@ -52,24 +52,24 @@ def experiment(e: Experiment):
     schnet = SchNet()
 
     schnet.compile(
-        optimizer=ks.optimizers.Adam(learning_rate=1e-3),
+        optimizer=ks.optimizers.experimental.AdamW(learning_rate=1e-3),
         loss=ks.losses.MeanSquaredError(),
     )
 
     schnet.fit(
         x_schnet_train, y_train,
-        epochs=1,
+        epochs=25,
         batch_size=16
     )
 
-    schnet_embeddings = schnet(x_schnet_train, return_edge_embeddings=True)
+    schnet_embeddings = schnet(x_schnet_train, return_node_embeddings=True)
     schnet_embeddings = schnet_embeddings.numpy()
 
     # Dataset Augmentation
     for graph, emb in zip(graphs_train, schnet_embeddings):
 
-        graph['edge_attributes'] = np.concatenate([
-            graph['edge_attributes'], emb
+        graph['node_attributes'] = np.concatenate([
+            graph['node_attributes'], emb
         ], axis=-1)
 
     x_megan_train = tensors_from_graphs(graphs_train)
